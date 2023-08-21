@@ -12,30 +12,29 @@ class Agente_Aspiradora_simple:
         self.pos = initial_state
         self.env = environment
         self.dic = dict(environment)
+        self.n = len(self.env)
     
     def accion(self):
-        print("Initial state =", self.env)
-        while(True):
-            if self.dic[0] == self.dic[1] == 1:
+        for i in range(self.n):
+            if self.dic[i] == 0:
                 break
-            if self.dic[self.pos] == 0: 
-                self.dic[self.pos] = 1
-                self.env[self.pos][1] = 1
-                print("Clean room", self.pos)
-                print("Actual state =", self.env)
-                if self.dic[(self.pos+1)%2] == 1:
-                    break
+            elif self.dic[i] == 1 and i == self.n-1:
+                print("Done")
+                return True
+        print("Estado inicial =", self.env)
+        if self.dic[self.pos] == 0: 
+            self.dic[self.pos] = 1
+            self.env[self.pos][1] = 1
+            print("Limpiar cuarto", self.pos)
+            print("Estado actual =", self.env)
+            if self.dic[(self.pos+1)%self.n] == 1:
+                return "Done"
+        elif self.dic[self.pos] == 1:
+            print("Move to next room")
             self.pos += 1
-            self.pos = self.pos%2
-            print("Move to room", self.pos)
-            print("Actual state =", self.env)
+            self.pos = self.pos%self.n
         return self.env
 
-aspiradora1 = Agente_Aspiradora_simple(0, [[0,0],[1,0]])
-aspiradora2 = Agente_Aspiradora_simple(0, [[0,1],[1,0]])
-aspiradora3 = Agente_Aspiradora_simple(0, [[0,0],[1,1]])
-aspiradora4 = Agente_Aspiradora_simple(0, [[0,1],[1,1]])
-print(aspiradora1.accion())
-print(aspiradora2.accion())
-print(aspiradora3.accion())
-print(aspiradora4.accion())
+aspiradora1 = Agente_Aspiradora_simple(1, [[0,0],[1,0],[2,1]])
+while aspiradora1.accion() != True:
+    continue
